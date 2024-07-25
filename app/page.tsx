@@ -5,15 +5,18 @@ import Header from './component/Header';
 import LeftSidebar from './component/LeftSidebar';
 import RightSidebar from './component/RightSidebar';
 import StackAndAlgorithm from './component/StackAlgorithm';
+import { RecoilRoot } from 'recoil';
 
-export default function Home() {
+export default function App() {
   return (
     <main className="flex min-h-screen">
       <LeftSidebar initialOpen={true} />
       <div className="flex-1 flex flex-col">
         <Header />
-        <AddTask />
-        <StackAndAlgorithm />
+        <RecoilRoot>
+          <AddTask />
+          <StackAndAlgorithm />
+        </RecoilRoot>
       </div>
       <RightSidebar initialOpen={true} />
     </main>

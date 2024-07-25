@@ -1,15 +1,37 @@
-"use client"; // 클라이언트 컴포넌트로 지정
+"use client";
 
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { stackState } from './StackState';
 
 export default function AddTask() {
     const [task, setTask] = useState('');
     const [priority, setPriority] = useState('중요도');
     const [duration, setDuration] = useState('');
     const [memo, setMemo] = useState('');
+    const [stack, setStack] = useRecoilState(stackState);
+
+    // 블록 추가 함수
+    const addBlock = () => {
+        const newItem = {
+            task,
+            priority,
+            duration,
+            memo,
+        };
+
+        // 새로운 아이템을 스택에 추가
+        setStack(prevStack => [...prevStack, newItem]);
+
+        // 입력 필드 초기화
+        setTask('');
+        setPriority('중요도');
+        setDuration('');
+        setMemo('');
+    };
 
     return (
-        <section className="flex-1 m-7 p-7 space-y-4 text-black	bg-slate-300">
+        <section className="flex-1 m-7 p-7 space-y-4 rounded border text-black	bg-slate-300 ">
             {/* 해야할 일 입력 및 중요도 드롭다운 */}
             <div className="flex flex-row space-x-10">
                 <input
@@ -18,7 +40,7 @@ export default function AddTask() {
                     value={task}
                     onChange={(e) => setTask(e.target.value)}
                     className="p-2 border rounded border-gray-300 w-full"
-                />                    
+                />
                 <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
@@ -46,14 +68,16 @@ export default function AddTask() {
                     placeholder="메모를 입력하세요"
                     value={memo}
                     onChange={(e) => setMemo(e.target.value)}
-                    className="p-2 border rounded border-gray-300 w-full h-24"
+                    className="p-2 border rounded border-gray-300 w-full h-40"
                 />
             </div>
 
             {/* 버튼들 */}
             <div className="flex space-x-2">
                 <button className="bg-gray-200 p-2 rounded border border-gray-300">자주 쓰는 일 등록</button>
-                <button className="bg-blue-500 text-white p-2 rounded border border-blue-500 hover:bg-blue-600">추가하기</button>
+                <button
+                    onClick={addBlock}
+                    className="bg-blue-500 text-white p-2 rounded border border-blue-500 hover:bg-blue-600">추가하기</button>
             </div>
         </section>
     );
