@@ -11,6 +11,7 @@ export default function TaskBlock() {
     return (
         <div className="bg-gray-100 p-4 border border-gray-300 rounded-lg shadow-md flex-1">
             <div className="flex flex-col">
+            <h2 className="text-lg font-bold mb-2">Todo List</h2>
                 {stack.length === 0 ? (
                     <p className="text-gray-500">할일을 등록해주세요</p>
                 ) : (

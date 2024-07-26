@@ -7,7 +7,7 @@ import { stackState } from './StackState';
 export default function AddTask() {
     const [task, setTask] = useState('');
     const [priority, setPriority] = useState('중요도');
-    const [duration, setDuration] = useState('');
+    const [duration, setDuration] = useState(0);
     const [memo, setMemo] = useState('');
     const [stack, setStack] = useRecoilState(stackState);
 
@@ -20,13 +20,10 @@ export default function AddTask() {
             memo,
         };
 
-        // 새로운 아이템을 스택에 추가
         setStack(prevStack => [...prevStack, newItem]);
-
-        // 입력 필드 초기화
         setTask('');
         setPriority('중요도');
-        setDuration('');
+        setDuration(0);
         setMemo('');
     };
 
@@ -55,7 +52,7 @@ export default function AddTask() {
                     type="number"
                     placeholder="예상 소요 기간(일)"
                     value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
+                    onChange={(e) => setDuration(Number(e.target.value))}
                     className="p-2 border rounded border-gray-300 w-1/4"
                 />
             </div>

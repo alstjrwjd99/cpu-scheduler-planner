@@ -1,10 +1,10 @@
-"use client"; // 클라이언트 컴포넌트로 지정
+"use client";
 
-import AddTask from './component/AddTask';
-import Header from './component/Header';
-import LeftSidebar from './component/LeftSidebar';
-import RightSidebar from './component/RightSidebar';
-import StackAndAlgorithm from './component/StackAlgorithm';
+import AddTask from './components/AddTask';
+import Header from './components/Header';
+import LeftSidebar from './components/LeftSidebar';
+import RightSidebar from './components/RightSidebar';
+import StackAndAlgorithm from './components/StackAlgorithm';
 import { RecoilRoot } from 'recoil';
 
 export default function App() {
