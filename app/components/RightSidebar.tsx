@@ -1,4 +1,4 @@
-"use client"; // 클라이언트 컴포넌트로 지정
+"use client";
 
 import { useState } from 'react';
 
@@ -19,7 +19,7 @@ export default function RightSidebar({ initialOpen = true }: SidebarProps) {
       </button>
       {isOpen && (
         <div className="text-white p-4">
-          <p>Right Sidebar Content</p>
+          <p>자주 사용하는 일</p>
         </div>
       )}
     </div>

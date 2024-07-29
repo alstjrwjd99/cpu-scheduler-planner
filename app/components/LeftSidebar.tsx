@@ -19,7 +19,7 @@ export default function LeftSidebar({ initialOpen = true }: SidebarProps) {
       </button>
       {isOpen && (
         <div className="text-white p-4">
-          <p>Left Sidebar Content</p>
+          <p>완료된 일정</p>
         </div>
       )}
     </div>

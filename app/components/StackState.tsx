@@ -7,6 +7,21 @@ export type Task = {
   memo: string;
 };
 
+export type ChartSettings = {
+  projectName: string;
+  startDate: string;
+  endDate: string;
+};
+
+export const chartSettingsState = atom<ChartSettings>({
+  key: 'chartSettingsState',
+  default: {
+      projectName: '',
+      startDate: '',
+      endDate: '',
+  },
+});
+
 export const stackState = atom<Task[]>({
   key: 'stackState', 
   default: [],

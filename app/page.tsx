@@ -9,16 +9,16 @@ import { RecoilRoot } from 'recoil';
 
 export default function App() {
   return (
-    <main className="flex min-h-screen">
-      <LeftSidebar initialOpen={true} />
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <RecoilRoot>
+    <RecoilRoot>
+      <main className="flex min-h-screen">
+        <LeftSidebar initialOpen={true} />
+        <div className="flex-1 flex flex-col">
+          <Header />
           <AddTask />
           <StackAndAlgorithm />
-        </RecoilRoot>
-      </div>
-      <RightSidebar initialOpen={true} />
-    </main>
+        </div>
+        <RightSidebar initialOpen={true} />
+      </main>
+    </RecoilRoot>
   );
 }

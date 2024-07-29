@@ -2,8 +2,7 @@ import { Task } from '../components/StackState';
 
 export function RoundRobin(tasks: Task[]): Task[] {
     const timeSlice = 4; // 각 작업에 할당된 시간 조각 (시간 단위)
-    const hoursPerDay = 8; // 하루에 일할 수 있는 총 시간
-
+    
     // 작업들을 time slice 단위로 나누는 함수
     const distributeTime = (task: Task): Task[] => {
         const requiredTime = task.duration; // 각 작업에 필요한 시간
@@ -18,7 +17,7 @@ export function RoundRobin(tasks: Task[]): Task[] {
 
     // 모든 작업을 time slice 단위로 나누고 순차적으로 재배치
     let distributedTasks: Task[] = [];
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
         distributedTasks = [...distributedTasks, ...distributeTime(task)];
     });
 

@@ -1,12 +1,12 @@
 "use client"; // 클라이언트 컴포넌트로 지정
 
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { chartSettingsState } from './StackState'; // 상태 파일 경로에 맞게 수정
 
 export default function Header() {
-    // 상태 관리
-    const [projectName, setProjectName] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    // Recoil 상태 관리
+    const [chartSettings, setChartSettings] = useRecoilState(chartSettingsState);
     const [isEditing, setIsEditing] = useState(false);
 
     // 더블 클릭 시 입력 모드로 전환
@@ -21,7 +21,10 @@ export default function Header() {
 
     // 입력 값 변경 시 상태 업데이트
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProjectName(e.target.value);
+        setChartSettings(prev => ({
+            ...prev,
+            projectName: e.target.value
+        }));
     };
 
     return (
@@ -32,7 +35,7 @@ export default function Header() {
                         <input
                             id="project-name"
                             type="text"
-                            value={projectName}
+                            value={chartSettings.projectName}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             autoFocus
@@ -42,7 +45,7 @@ export default function Header() {
                         <span className="block text-3xl font-large cursor-pointer"
                             onClick={handleDoubleClick}
                         >
-                            {projectName || "프로젝트 이름 입력"}
+                            {chartSettings.projectName || "프로젝트 이름 입력"}
                         </span>)}
                 </div>
 
@@ -52,8 +55,11 @@ export default function Header() {
                     <input
                         id="start-date"
                         type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
+                        value={chartSettings.startDate}
+                        onChange={(e) => setChartSettings(prev => ({
+                            ...prev,
+                            startDate: e.target.value
+                        }))}
                         className="p-1 rounded border border-gray-300"
                     />
                 </div>
@@ -64,8 +70,11 @@ export default function Header() {
                     <input
                         id="end-date"
                         type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
+                        value={chartSettings.endDate}
+                        onChange={(e) => setChartSettings(prev => ({
+                            ...prev,
+                            endDate: e.target.value
+                        }))}
                         className="p-1 rounded border border-gray-300"
                     />
                 </div>
