@@ -1,117 +1,144 @@
 "use client";
 
 import { useRecoilValue } from 'recoil';
-import { stackState, selectedAlgorithmState, chartSettingsState } from './StackState';
+import { stackState, selectedAlgorithmState, chartSettingsState, Task } from './StackState';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement,Title, Tooltip, Legend, TimeScale,TooltipItem
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
 import { FCFS } from '../algorithms/FCFS';
 import { Priority } from '../algorithms/Priority';
 import { RoundRobin } from '../algorithms/RoundRobin';
 import { SJF } from '../algorithms/SJF';
 import { SRTF } from '../algorithms/SRTF';
+import { callback } from 'chart.js/helpers';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+// Register necessary Chart.js components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale
+);
 
 export default function ChartModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; }) {
-    const stack = useRecoilValue(stackState);
+    let processedTasks = useRecoilValue(stackState);
+    const projectInfo = useRecoilValue(chartSettingsState);
     const selectedAlgorithm = useRecoilValue(selectedAlgorithmState);
     const chartSettings = useRecoilValue(chartSettingsState);
+    const formatDate = (date: Date): string => {
+        return new Intl.DateTimeFormat('ko-KR', { month: 'short', day: '2-digit' }).format(date);
+    };   
 
-    // 선택된 알고리즘에 따라 작업 배열을 처리합니다.
-    let processedTasks = stack;
     switch (selectedAlgorithm) {
         case 'FCFS':
-            processedTasks = FCFS(stack);
+            processedTasks = FCFS(processedTasks, projectInfo);
             break;
         case 'Priority':
-            processedTasks = Priority(stack);
+            processedTasks = Priority(processedTasks);
             break;
         case 'RoundRobin':
-            processedTasks = RoundRobin(stack);
+            processedTasks = RoundRobin(processedTasks);
             break;
         case 'SJF':
-            processedTasks = SJF(stack);
+            processedTasks = SJF(processedTasks);
             break;
         case 'SRTF':
-            processedTasks = SRTF(stack);
+            processedTasks = SRTF(processedTasks);
             break;
         default:
-            processedTasks = stack;
+            processedTasks = processedTasks;
     }
-
+    
     const data = {
-        labels: processedTasks.map(task => task.task),
+        labels: processedTasks.map(task => task.date),
         datasets: [
             {
-                label: 'Duration (days)',
-                data: processedTasks.map(task => task.duration),
-                backgroundColor: 'rgba(54, 162, 235, 0.5)', // 색상 변경
-                borderColor: 'rgba(54, 162, 235, 1)', // 색상 변경
-                borderWidth: 2, // 테두리 두께 증가
-                barThickness: 30, // 바 두께
+                label: '걸리는 시간(시)',
+                data: processedTasks.map(task => ({
+                    x: task.date,
+                    y: task.duration <= 8 ? task.duration : 8,
+                    title: task.title, 
+                    duration: task.duration,
+                    date:task.date
+                })),
+                backgroundColor: processedTasks.map(task => task.color),
+                borderColor: processedTasks.map(task => task.color),
+                borderWidth: 2,
+                barThickness: 30,
+
             },
         ],
     };
 
+
     const options = {
         responsive: true,
-        maintainAspectRatio: false, // 차트의 크기를 컨테이너에 맞게 조정
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'top' as const,
-                labels: {
-                    font: {
-                        size: 14, // 레전드 폰트 크기
-                        family: 'Arial, sans-serif', // 레전드 폰트
-                    },
-                },
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return `${context.label}: ${context.raw} days`;
-                    },
-                },
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', // 툴팁 배경색
-                titleColor: 'white', // 툴팁 제목 색상
-                bodyColor: 'white', // 툴팁 내용 색상
-                borderColor: 'rgba(255, 255, 255, 0.5)', // 툴팁 테두리 색상
-                borderWidth: 1, // 툴팁 테두리 두께
-                padding: 10, // 툴팁 내부 여백
-                cornerRadius: 5, // 툴팁 모서리 둥글기
+                display: false,
             },
             title: {
                 display: true,
                 text: chartSettings.projectName || 'Task Schedule Chart',
                 font: {
-                    size: 18, // 제목 폰트 크기
-                    family: 'Arial, sans-serif', // 제목 폰트
+                    size: 20,
+                    family: 'Arial, sans-serif',
                 },
-                color: '#333', // 제목 색상
+                color: '#333',
             },
+            tooltip: {
+                callbacks: {
+                    title: (tooltipItems: TooltipItem<'bar'>[]) => {
+                        if (tooltipItems.length > 0) {
+                            const item = tooltipItems[0].raw as { title: string };
+                            return item.title;
+                        }
+                        return '';
+                    },
+                    label: (tooltipItem: TooltipItem<'bar'>) => {
+                        const rawData = tooltipItem.raw as { date: Date };
+                        return `${formatDate(rawData.date)}`;
+                    }
+                }
+            }
         },
         scales: {
             x: {
+                type: 'time' as const,
+                time: {
+                    unit: 'day' as const,
+                    tooltipFormat: 'MMM dd',
+                    displayFormats: {
+                        day: 'MMM dd' // Format for x-axis labels
+                    },
+                },
                 ticks: {
                     font: {
-                        size: 12, // x축 레이블 폰트 크기
-                        family: 'Arial, sans-serif', // x축 레이블 폰트
+                        size: 12,
+                        family: 'Arial, sans-serif',
                     },
                 },
                 grid: {
-                    display: false, // x축 그리드선 숨기기
+                    display: false,
                 },
             },
             y: {
+                min: 0,
+                max: 8, // Set maximum value for y-axis
                 ticks: {
                     font: {
-                        size: 12, // y축 레이블 폰트 크기
-                        family: 'Arial, sans-serif', // y축 레이블 폰트
+                        size: 12,
+                        family: 'Arial, sans-serif',
                     },
-                    stepSize: 1, // y축 스텝 크기
+                    stepSize: 1,
                 },
                 grid: {
-                    color: 'rgba(0, 0, 0, 0.1)', // y축 그리드선 색상
+                    color: 'rgba(0, 0, 0, 0.1)',
                 },
             },
         },

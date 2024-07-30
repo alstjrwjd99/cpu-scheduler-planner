@@ -52,7 +52,7 @@ export default function AddTask() {
                     type="number"
                     placeholder="예상 소요 기간(일)"
                     value={duration}
-                    onChange={(e) => setDuration(Number(e.target.value))}
+                    onChange={(e) => setDuration(Number(e.target.value)*8)}
                     className="p-2 border rounded border-gray-300 w-1/4"
                 />
             </div>

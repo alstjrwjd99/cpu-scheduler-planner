@@ -10,7 +10,7 @@ export function RoundRobin(tasks: Task[]): Task[] {
         
         return Array.from({ length: slices }, (_, i) => ({
             ...task,
-            task: `${task.task} (Part ${i + 1})`,
+            task: `${task.title} (Part ${i + 1})`,
             duration: Math.min(timeSlice, requiredTime - i * timeSlice), // 각 조각의 소요 시간
         }));
     };

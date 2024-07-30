@@ -22,7 +22,7 @@ export default function TaskBlock() {
                         {firstColumnTasks.map((item, index) => (
                             <div key={index} className="flex flex-row space-x-4">
                                 <div className="w-full bg-blue-100 p-3 rounded border border-blue-300 flex items-center space-x-4">
-                                    <h3 className="font-bold flex-shrink-0">{item.task}</h3>
+                                    <h3 className="font-bold flex-shrink-0">{item.title}</h3>
                                     <p className="truncate flex-grow">{item.memo}</p>
                                 </div>
                                 <button
@@ -39,7 +39,7 @@ export default function TaskBlock() {
                             {secondColumnTasks.map((item, index) => (
                                 <div key={index + 5} className="flex flex-row space-x-4">
                                     <div className="w-full bg-blue-100 p-3 rounded border border-blue-300 flex items-center space-x-4">
-                                        <h3 className="font-bold flex-shrink-0">{item.task}</h3>
+                                        <h3 className="font-bold flex-shrink-0">{item.title}</h3>
                                         <p className="truncate flex-grow">{item.memo}</p>
                                     </div>
                                     <button

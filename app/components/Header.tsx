@@ -10,7 +10,7 @@ export default function Header() {
     const [isEditing, setIsEditing] = useState(false);
 
     // 더블 클릭 시 입력 모드로 전환
-    const handleDoubleClick = () => {
+    const handleClick = () => {
         setIsEditing(true);
     };
 
@@ -43,7 +43,7 @@ export default function Header() {
                         />
                     ) : (
                         <span className="block text-3xl font-large cursor-pointer"
-                            onClick={handleDoubleClick}
+                            onClick={handleClick}
                         >
                             {chartSettings.projectName || "프로젝트 이름 입력"}
                         </span>)}
@@ -55,11 +55,14 @@ export default function Header() {
                     <input
                         id="start-date"
                         type="date"
-                        value={chartSettings.startDate}
-                        onChange={(e) => setChartSettings(prev => ({
-                            ...prev,
-                            startDate: e.target.value
-                        }))}
+                        value={chartSettings.startDate ? chartSettings.startDate.toISOString().split('T')[0] : ''}
+                        onChange={(e) => {
+                            const selectedDate = new Date(e.target.value); 
+                            setChartSettings(prev => ({
+                              ...prev,
+                              startDate: selectedDate
+                            }));
+                          }}
                         className="p-1 rounded border border-gray-300"
                     />
                 </div>
@@ -70,11 +73,14 @@ export default function Header() {
                     <input
                         id="end-date"
                         type="date"
-                        value={chartSettings.endDate}
-                        onChange={(e) => setChartSettings(prev => ({
-                            ...prev,
-                            endDate: e.target.value
-                        }))}
+                        value={chartSettings.endDate ? chartSettings.endDate.toISOString().split('T')[0] : ''}
+                        onChange={(e) => {
+                            const selectedDate = new Date(e.target.value); // 문자열을 Date 객체로 변환
+                            setChartSettings(prev => ({
+                              ...prev,
+                              endDate: selectedDate
+                            }));
+                          }}
                         className="p-1 rounded border border-gray-300"
                     />
                 </div>
