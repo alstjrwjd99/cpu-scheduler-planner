@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { stackState } from './StackState';
+import { color } from 'chart.js/helpers';
 
 export default function AddTask() {
     const [task, setTask] = useState('');
@@ -11,7 +12,6 @@ export default function AddTask() {
     const [memo, setMemo] = useState('');
     const [stack, setStack] = useRecoilState(stackState);
 
-    // 블록 추가 함수
     const addBlock = () => {
         const newItem = {
             task,

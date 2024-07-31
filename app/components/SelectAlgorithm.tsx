@@ -14,7 +14,6 @@ export default function SelectAlgorithm() {
         { name: '짧은 일부터 처리하기 (SJF)', key: 'SJF' },
         { name: '우선 순위 먼저 처리하기 (Priority)', key: 'Priority' },
         { name: '골고루 처리하기 (Round Robin)', key: 'RoundRobin' },
-        { name: '최단 남은 시간 우선 (SRTF)', key: 'SRTF' },
     ];
 
     const handleSelect = (key: string) => {

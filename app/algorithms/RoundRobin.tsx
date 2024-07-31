@@ -1,25 +1,54 @@
 import { Task } from '../components/StackState';
+import { ChartSettings } from '../components/StackState';
 
-export function RoundRobin(tasks: Task[]): Task[] {
-    const timeSlice = 4; // 각 작업에 할당된 시간 조각 (시간 단위)
-    
-    // 작업들을 time slice 단위로 나누는 함수
-    const distributeTime = (task: Task): Task[] => {
-        const requiredTime = task.duration; // 각 작업에 필요한 시간
-        const slices = Math.ceil(requiredTime / timeSlice); // 필요한 조각의 수
-        
-        return Array.from({ length: slices }, (_, i) => ({
-            ...task,
-            task: `${task.title} (Part ${i + 1})`,
-            duration: Math.min(timeSlice, requiredTime - i * timeSlice), // 각 조각의 소요 시간
-        }));
+export function RoundRobin(stack: Task[], projectInfo: ChartSettings): Task[] {
+    const timeSlice = 4;
+    const startProject = new Date(projectInfo.startDate);
+    const taskWithDate: Task[][] = [];
+
+    const generateRandomColor = () => {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return `rgba(${r}, ${g}, ${b}, 0.5)`;
     };
 
-    // 모든 작업을 time slice 단위로 나누고 순차적으로 재배치
-    let distributedTasks: Task[] = [];
-    tasks.forEach((task) => {
-        distributedTasks = [...distributedTasks, ...distributeTime(task)];
+    stack.forEach((task) => {
+        let taskDurationHours = task.duration;
+        const graphColor = generateRandomColor();
+        let tmpTaskList: Task[] = [];
+
+        while (taskDurationHours > 0) {
+            const hoursToAllocate = Math.min(taskDurationHours, timeSlice);
+            const tmpTask: Task = {
+                ...task,
+                duration: hoursToAllocate,
+                color: graphColor
+            };
+
+            tmpTaskList.push(tmpTask);
+            taskDurationHours -= hoursToAllocate;
+        }
+        taskWithDate.push(tmpTaskList);
     });
 
-    return distributedTasks;
+    const totalTaskList: Task[] = [];
+    let index = 0;
+    let currentStartTime = new Date(startProject); // Keep track of the current start time
+
+    while (totalTaskList.length < stack.reduce((acc, task) => acc + Math.ceil(task.duration / timeSlice), 0)) {
+        taskWithDate.forEach(taskList => {
+            if (taskList[index]) {
+                const timeTask: Task = {
+                    ...taskList[index],
+                    date: new Date(currentStartTime)
+                };
+                totalTaskList.push(timeTask);
+                currentStartTime.setDate(currentStartTime.getDate() + 1);
+            }
+        });
+        index++;
+    }
+
+    return totalTaskList;
 }

@@ -6,7 +6,7 @@ export type Task = {
   duration: number;
   memo: string;
   date? : Date | null;
-  color?: string; 
+  color?: string | null; 
 };
 
 export const stackState = atom<Task[]>({
@@ -14,26 +14,26 @@ export const stackState = atom<Task[]>({
   default: [
     {
       title: 'Design Mockups',
-      priority: 'High',
+      priority: '상',
       duration: 42,
       memo: 'Create design mockups for the new project',
-      date: new Date('2024-07-01T09:00:00'),
+      date: new Date('2024-07-31T09:00:00'),
       color: 'rgba(255, 99, 132, 0.5)' // Example color
     },
     {
       title: 'API Integration',
-      priority: 'Medium',
+      priority: '하',
       duration: 22,
       memo: 'Integrate the new API with existing services',
-      date: new Date('2024-07-03T09:00:00'),
+      date: new Date('2024-08-01T09:00:00'),
       color: 'rgba(54, 162, 235, 0.5)' // Example color
     },
     {
       title: 'Testing',
-      priority: 'Low',
+      priority: '중',
       duration: 27,
       memo: 'Perform end-to-end testing on the new features',
-      date: new Date('2024-07-07T09:00:00'),
+      date: new Date('2024-08-02T09:00:00'),
       color: 'rgba(255, 206, 86, 0.5)' // Example color
     }
   ],
