@@ -15,10 +15,12 @@ export function Priority(stack: Task[], projectInfo: ChartSettings): Task[] {
     };
     
     const priorityMap: { [key: string]: number } = {
-        '상': 1,
-        '중': 2,
-        '하': 3,
-        '중요도':4,
+        '매우높음' : 1,
+        '높음': 2,
+        '중간': 3,
+        '낮음': 4,
+        '매우낮음' : 5,
+        '중요도':6,
     };
 
     stack.forEach(task => {

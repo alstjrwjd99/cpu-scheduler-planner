@@ -38,12 +38,14 @@ export default function SelectAlgorithm() {
                     </li>
                 ))}
             </ul>
-            <button
-                className="bg-blue-500 text-white p-2 rounded-lg border border-blue-600 hover:bg-blue-600 mt-4"
-                onClick={openModal}
-            >
-                일정 짜기
-            </button>
+            <div className="flex justify-end mt-4">
+                <button
+                    className="bg-blue-500 text-white p-2 rounded-lg border border-blue-600 hover:bg-blue-600"
+                    onClick={openModal}
+                >
+                    일정 짜기
+                </button>
+            </div>
             <ChartModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
     );
